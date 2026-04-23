@@ -19,10 +19,11 @@
             font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif; 
             background: var(--bg-body); 
             color: var(--novaro-black);
-            -webkit-tap-highlight-color: transparent; /* 移除移动端点击蓝框 */
+            /* 关键：移除移动端点击时的系统默认蓝色高亮，让自定义动效更纯净 */
+            -webkit-tap-highlight-color: transparent; 
         }
 
-        /* 第一层：PC端背景图设置 */
+        /* 第一层：背景图容器 */
         .brand-hero {
             position: relative;
             background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('hero-image.jpg'); 
@@ -35,26 +36,28 @@
             overflow: hidden;
         }
 
+        /* Logo 样式及动效 */
         .brand-logo-img {
             width: 300px; 
             height: auto;
             z-index: 2;
             cursor: pointer;
             filter: drop-shadow(0 2px 15px rgba(0,0,0,0.2));
-            /* 动效过渡时间 */
+            /* 使用弹性贝塞尔曲线，让回弹更有质感 */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             user-select: none;
+            -webkit-user-drag: none;
         }
 
-        /* Logo 鼠标悬停动效 */
+        /* 悬停微扩（主要针对PC） */
         .brand-logo-img:hover {
             transform: scale(1.05);
         }
 
-        /* 2. Logo 点击/触碰时的压感交互动效 */
+        /* 点击压感（核心动效，已通过下方 JS 适配 iOS） */
         .brand-logo-img:active {
-            transform: scale(0.92); /* 点击时轻微缩小 */
-            transition: transform 0.1s; /* 缩短点击反馈时间 */
+            transform: scale(0.92); 
+            transition: transform 0.1s; /* 点击反馈要快 */
         }
 
         /* 第二层：省份筛选 */
@@ -87,7 +90,7 @@
             font-weight: 600;
         }
 
-        /* 第三层：展厅列表 */
+        /* 第三层：展厅列表内容 */
         .main-content {
             max-width: 900px;
             margin: 30px auto;
@@ -132,36 +135,16 @@
 
         #map-container { height: 400px; background: #eee; margin: 40px 0; border: 1px solid #ddd; }
 
-        /* 移动端适配 */
+        /* 移动端专项适配 */
         @media (max-width: 768px) {
-            .brand-hero { 
-                height: 150px; 
-            }
-            .brand-logo-img { 
-                width: 130px; 
-            }
-            .nav-filter { 
-                justify-content: flex-start; 
-                padding: 0 10px;
-            }
-            .province-link {
-                padding: 15px 18px;
-                font-size: 12px;
-            }
-            .showroom-card { 
-                flex-direction: column; 
-                text-align: center; 
-                padding: 25px 20px; 
-            }
-            .action-area { 
-                width: 100%; 
-                margin-top: 20px; 
-            }
-            .btn {
-                width: 100%; 
-            }
+            .brand-hero { height: 150px; }
+            .brand-logo-img { width: 130px; }
+            .nav-filter { justify-content: flex-start; padding: 0 10px; }
+            .province-link { padding: 15px 18px; font-size: 12px; }
+            .showroom-card { flex-direction: column; text-align: center; padding: 25px 20px; }
+            .action-area { width: 100%; margin-top: 20px; }
+            .btn { width: 100%; }
         }
-
     </style>
 </head>
 <body>
@@ -190,6 +173,11 @@
     <script src="https://webapi.amap.com/maps?v=2.0&key=7639ee5e15dcd7d785e584f831c2d048"></script>
 
     <script>
+        // ------------------------------------------------
+        // 核心修复：开启 iOS 设备的 CSS :active 状态
+        // ------------------------------------------------
+        document.body.addEventListener('touchstart', function () {}, false);
+
         const data = [
             { prov: "江苏", name: "NOVARO展厅 · 常州", pos: [120.111262, 31.726854], addr: "江苏省常州市武进区横林崔桥崔北工业区梅巷路12号" },
             { prov: "广东", name: "NOVARO展厅 · 佛山", pos: [113.000501, 23.121306], addr: "广东省佛山市南海区狮山镇博爱中路69号京东数字产业园659" },
