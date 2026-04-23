@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>NOVARO诺伽 | 高端生态家居品牌</title>
+    <style>
+        /* 品牌色彩规范 */
+        :root {
+            --novaro-red: rgb(232, 54, 52);
+            --novaro-black: rgb(25, 25, 25);
+            --novaro-grey: rgb(137, 137, 137);
+            --pure-white: #ffffff;
+            --bg-body: #f4f4f4;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif; 
+            background: var(--bg-body); 
+            color: var(--novaro-black);
+            -webkit-tap-highlight-color: transparent; /* 移除移动端点击蓝框 */
+        }
+
+        /* 第一层：PC端背景图设置 */
+        .brand-hero {
+            position: relative;
+            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('hero-image.jpg'); 
+            background-size: cover;
+            background-position: center;
+            height: 400px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .brand-logo-img {
+            width: 300px; 
+            height: auto;
+            z-index: 2;
+            cursor: pointer;
+            filter: drop-shadow(0 2px 15px rgba(0,0,0,0.2));
+            /* 动效过渡时间 */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+        }
+
+        /* Logo 鼠标悬停动效 */
+        .brand-logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* 2. Logo 点击/触碰时的压感交互动效 */
+        .brand-logo-img:active {
+            transform: scale(0.92); /* 点击时轻微缩小 */
+            transition: transform 0.1s; /* 缩短点击反馈时间 */
+        }
+
+        /* 第二层：省份筛选 */
+        .nav-filter {
+            background: var(--novaro-black);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            scrollbar-width: none; 
+        }
+        .nav-filter::-webkit-scrollbar { display: none; }
+
+        .province-link {
+            padding: 18px 25px;
+            color: var(--novaro-grey);
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+        .province-link.active {
+            color: var(--pure-white);
+            background: rgba(255,255,255,0.05);
+            font-weight: 600;
+        }
+
+        /* 第三层：展厅列表 */
+        .main-content {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .list-header {
+            font-size: 11px;
+            color: var(--novaro-grey);
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 2px solid var(--novaro-red);
+            letter-spacing: 1px;
+        }
+        .showroom-card {
+            background: var(--pure-white);
+            margin-bottom: 20px;
+            padding: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e0e0e0;
+            transition: 0.4s;
+        }
+        .info-box h2 { margin: 0; font-size: 18px; font-weight: 500; }
+        .info-box p { margin: 10px 0 0; font-size: 13px; color: var(--novaro-grey); line-height: 1.6; }
+
+        .action-area { display: flex; flex-direction: column; gap: 12px; }
+        .btn {
+            min-width: 130px; padding: 12px 0; font-size: 12px;
+            text-align: center; text-decoration: none; letter-spacing: 2px;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-red {
+            background: var(--novaro-red);
+            color: var(--pure-white);
+            border: 1px solid var(--novaro-red);
+        }
+        .btn-outline {
+            background: transparent; color: var(--novaro-grey);
+            border: 1px solid var(--novaro-grey);
+        }
+
+        #map-container { height: 400px; background: #eee; margin: 40px 0; border: 1px solid #ddd; }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .brand-hero { 
+                height: 150px; 
+            }
+            .brand-logo-img { 
+                width: 130px; 
+            }
+            .nav-filter { 
+                justify-content: flex-start; 
+                padding: 0 10px;
+            }
+            .province-link {
+                padding: 15px 18px;
+                font-size: 12px;
+            }
+            .showroom-card { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 25px 20px; 
+            }
+            .action-area { 
+                width: 100%; 
+                margin-top: 20px; 
+            }
+            .btn {
+                width: 100%; 
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="brand-hero">
+        <img src="logo-banner.png" alt="NOVARO" class="brand-logo-img">
+    </header>
+
+    <nav class="nav-filter">
+        <div class="province-link active" onclick="filterShowroom('全部', this)">全部展厅</div>
+        <div class="province-link" onclick="filterShowroom('江苏', this)">江苏</div>
+        <div class="province-link" onclick="filterShowroom('广东', this)">广东</div>
+        <div class="province-link" onclick="filterShowroom('山东', this)">山东</div>
+        <div class="province-link" onclick="filterShowroom('四川', this)">四川</div>
+    </nav>
+
+    <div class="main-content">
+        <div class="list-header" id="current-category">SHOWROOMS / 全部展厅</div>
+        <div id="showroom-list"></div>
+        <div id="map-container"></div>
+    </div>
+
+    <script type="text/javascript">
+        window._AMapSecurityConfig = { securityJsCode: '68a5bab4875a8c832cdc0d5597aca5f3' };
+    </script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=7639ee5e15dcd7d785e584f831c2d048"></script>
+
+    <script>
+        const data = [
+            { prov: "江苏", name: "NOVARO展厅 · 常州", pos: [120.111262, 31.726854], addr: "江苏省常州市武进区横林崔桥崔北工业区梅巷路12号" },
+            { prov: "广东", name: "NOVARO展厅 · 佛山", pos: [113.000501, 23.121306], addr: "广东省佛山市南海区狮山镇博爱中路69号京东数字产业园659" },
+            { prov: "山东", name: "NOVARO展厅 · 临沂", pos: [118.221942, 35.099386], addr: "山东省临沂市兰山区创业路1088号5号楼" },
+            { prov: "四川", name: "NOVARO展厅 · 成都", pos: [103.697688, 30.632958], addr: "四川省成都市崇州市崇阳街道崇阳大道1号四川智能大厦" },
+            { prov: "广东", name: "NOVARO展厅 · 肇庆", pos: [112.827725, 23.228665], addr: "广东省肇庆市四会市大沙镇南江工业园工业大道21号" }
+        ];
+
+        let amap = new AMap.Map('map-container', { 
+            zoom: 4, center: [108.95, 34.27], mapStyle: 'amap://styles/light' 
+        });
+
+        function filterShowroom(prov, el) {
+            document.querySelectorAll('.province-link').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('current-category').innerText = `SHOWROOMS / ${prov}展厅`;
+            const list = prov === '全部' ? data : data.filter(d => d.prov === prov);
+            const html = list.map(item => `
+                <div class="showroom-card">
+                    <div class="info-box">
+                        <h2>${item.name}</h2>
+                        <p>${item.addr}</p>
+                    </div>
+                    <div class="action-area">
+                        <a class="btn btn-red" href="https://uri.amap.com/navigation?to=${item.pos[0]},${item.pos[1]},${item.name}&mode=car&callnative=1" target="_blank">立即导航</a>
+                        <div class="btn btn-outline" onclick="focusMap([${item.pos}], '${item.name}')">查看位置</div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('showroom-list').innerHTML = html;
+            amap.clearMap();
+            list.forEach(item => {
+                const marker = new AMap.Marker({ position: item.pos, map: amap });
+                marker.on('click', () => focusMap(item.pos, item.name));
+            });
+            amap.setFitView();
+        }
+
+        function focusMap(pos, name) {
+            document.getElementById('map-container').scrollIntoView({ behavior: 'smooth' });
+            amap.setZoomAndCenter(15, pos);
+            const info = new AMap.InfoWindow({ 
+                content: `<div style="padding:10px; font-size:12px; color:var(--novaro-black)"><b>${name}</b></div>`,
+                offset: new AMap.Pixel(0, -30)
+            });
+            info.open(amap, pos);
+        }
+        filterShowroom('全部', document.querySelector('.province-link'));
+    </script>
+</body>
+</html>
